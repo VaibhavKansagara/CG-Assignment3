@@ -17,6 +17,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Point.h"
 #include "Color.h"
+#include "Texture.h"
+
 using namespace std;
 
 #define PI 3.14159
@@ -89,6 +91,14 @@ public:
 
     void compute_adj_list();
 
+    void compute_spherical();
+
+    void compute_cylindrical();
+
+    void compute_plane();
+
+    void compute_texture_mapping();
+
     void compute_vertices_color();
 
     vector<Point> compute_normals();
@@ -116,6 +126,7 @@ private:
     Point mini,maxi;
     bool is_selected,is_light_source,is_select_rotate;
     unsigned int VAO,VBO,EBO;
+    Texture texture;
 };
 
 #endif

@@ -174,6 +174,16 @@ void Model::pass_info_shader(){
     glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*get_vertices().size(),&get_vertices_color()[0],GL_STATIC_DRAW);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(void*)0);
     glEnableVertexAttribArray(1);
+
+    unsigned int textureBuffer;
+    glGenBuffers(1,&textureBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER,textureBuffer);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*texture.get_plane().size(),&texture.get_plane()[0],GL_STATIC_DRAW);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(2);
+
+    texture.bind_texture(texture.get_id());
+    texture.load_create_texture("images/wall.jpg");
 }
 
 bool is_between(float mini,float maxi,float value){
@@ -246,6 +256,71 @@ void Model::compute_vertices_color(){
         p.normalize(mag);
         vertices_color.push_back(Color(abs(p.getX()),abs(p.getY()),abs(p.getZ())));
     }   
+}
+
+void Model::compute_spherical() {
+    glm::vec3 center;
+    center.x = (maxi.getX() + mini.getX()) * 0.5f;
+    center.y = (maxi.getY() + mini.getY()) * 0.5f;
+    center.z = (maxi.getZ() + mini.getZ()) * 0.5f;
+    float r = (maxi.getX() - mini.getX()) * 0.5f;
+    vector<float> spherical;
+    for (int i = 0; i < (vertices.size()/3) ; i++) {
+        glm::vec3 p;
+        p.x = vertices[i*3];
+        p.y = vertices[i*3+1];
+        p.z = vertices[i*3+2];
+        glm::vec2 tex;
+        p.x = p.x - center.x;
+        p.y = p.y - center.y;
+        p.z = p.z - center.z;
+        tex.x = atan2(-p.z, p.x) / (2 * 3.14);
+        tex.x+=3.14;
+        tex.y = (acos(-p.y / r) / 3.14);
+        spherical.push_back(tex.x);
+        spherical.push_back(tex.y);
+    }
+    texture.set_spherical(spherical);
+}
+
+void Model::compute_cylindrical() {
+    float height = maxi.getZ() - mini.getZ();
+    float r = (maxi.getX() - mini.getX()) * 0.5f;
+    vector<float> cylindrical;
+    for (int i = 0; i < (vertices.size()/3) ; i++) {
+        glm::vec2 tex;
+        glm::vec3 pos;
+        pos.x = vertices[i*3];
+        pos.y = vertices[i*3+1];
+        pos.z = vertices[i*3+2];
+        tex.x = acosf(pos.x / r) / (2 * 3.14f);
+        tex.y = pos.z;
+        cylindrical.push_back(tex.x);
+        cylindrical.push_back(tex.y);
+    }
+    texture.set_cylindrical(cylindrical);
+}
+
+void Model::compute_plane() {
+    vector<float> plane;
+    for (int i = 0; i < (vertices.size()/3) ; i++) {
+        glm::vec2 tex;
+        glm::vec3 pos;
+        pos.x = vertices[i*3];
+        pos.y = vertices[i*3+1];
+        pos.z = vertices[i*3+2];
+        tex.x = (pos.x - mini.getX()) / (maxi.getX() - mini.getX());
+        tex.y = (pos.y - mini.getY()) / (maxi.getY() - mini.getY());
+        plane.push_back(tex.x);
+        plane.push_back(tex.y);
+    }
+    texture.set_plane(plane);
+}
+
+void Model::compute_texture_mapping() {
+    compute_spherical();
+    compute_cylindrical();
+    compute_plane();
 }
 
 Point Model::transform(const Point& point,const Point& normal,const Point& incentre,float inradii){
@@ -393,5 +468,6 @@ ifstream & operator >> (ifstream &fin, Model &model){
 
     //compute color of the vertices.
     model.compute_vertices_color();
+    model.compute_texture_mapping();
     return fin;
 }

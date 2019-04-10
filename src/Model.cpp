@@ -81,6 +81,10 @@ unsigned int Model::get_VAO() const{
     return VAO;
 }
 
+const Texture & Model::get_texture() const{
+    return texture;
+}
+
 bool Model::get_light_source() const {
     return (is_light_source == true);
 }
@@ -109,23 +113,28 @@ void Model::set_translate(const glm::mat4& tr){
     translate = tr;
 }
 
-void Model::set_light_source(bool val){
+void Model::set_light_source(bool val) {
     is_light_source = val;
 }
 
-void Model::set_scale(GLfloat sc){
+void Model::set_scale(GLfloat sc) {
     scale = sc;
 }
 
-void Model::set_rotate(const glm::mat4& rr){
+void Model::set_rotate(const glm::mat4& rr) {
     rotate = rr;
 }
 void Model::set_selected(bool val) {
     is_selected = val;
 }
 
-void Model::set_select_rotate(bool val){
+void Model::set_select_rotate(bool val) {
     is_select_rotate = val;
+}
+
+void Model::set_texture(const Texture& tex) {
+    texture = tex;
+    compute_texture_mapping();
 }
 
 void Model::pass_info_lightshader(){
@@ -182,8 +191,6 @@ void Model::pass_info_shader(){
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(2);
 
-    texture.bind_texture(texture.get_id());
-    texture.load_create_texture("images/wall.jpg");
 }
 
 bool is_between(float mini,float maxi,float value){
@@ -468,6 +475,5 @@ ifstream & operator >> (ifstream &fin, Model &model){
 
     //compute color of the vertices.
     model.compute_vertices_color();
-    model.compute_texture_mapping();
     return fin;
 }

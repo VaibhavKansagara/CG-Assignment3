@@ -63,6 +63,8 @@ public:
 
     unsigned int get_VAO() const;
 
+    const Texture& get_texture() const;
+
     bool is_select() const;
 
     bool get_is_select_rotate() const;
@@ -86,6 +88,8 @@ public:
     void set_light_source(bool val);
 
     void set_select_rotate(bool val);
+
+    void set_texture(const Texture& tex);
 
     bool is_inside(Point trans_coord);
 

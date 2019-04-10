@@ -57,4 +57,7 @@ void View::display(const Model& model,const Shader& ourshader) {
     glBindVertexArray(model.get_VAO());
     glDrawElements(GL_TRIANGLES, model.get_indices().size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    model.get_texture().bind_texture(model.get_texture().get_id());
+    model.get_texture().load_create_texture();
 }

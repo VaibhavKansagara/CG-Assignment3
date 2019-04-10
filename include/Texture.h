@@ -21,6 +21,8 @@ class Texture{
 public:
     Texture();
 
+    Texture(string name);
+
     ~Texture();
 
     unsigned int get_id() const;
@@ -31,18 +33,23 @@ public:
 
     vector<float> get_plane() const;
 
+    string get_filename() const;
+
+    void set_filename(string name);
+
     void set_spherical(const vector<float>& sph);
 
     void set_cylindrical(const vector<float>& cyl);
 
     void set_plane(const vector<float>& pl);
 
-    void bind_texture(unsigned int id);
+    void bind_texture(unsigned int id) const;
 
-    void load_create_texture(string filename);
+    void load_create_texture() const;
 
 private:
     unsigned int id;
+    string filename;
     vector<float> spherical,cylindrical,plane;
 };
 

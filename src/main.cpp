@@ -59,10 +59,23 @@ int main(){
     Shader ourshader("shaders/vs.txt","shaders/fs.txt");
     Shader lightingShader("shaders/light_shader_vs.txt", "shaders/light_shaderfs.txt");
 
+    //Create texture objects.
+    Texture wood("images/wall.jpg");
+
+    Texture checkerboard("images/checkerboard.png");
+
+    Texture mars("images/mars.jpg");
+
+    Texture selfie("images/selfie.jpg");
+    //
+
     //Create Model and add models.
     Model cow = addModel("data/cow.ply");
+    cow.set_texture(wood);
     cow.pass_info_shader();
+
     Model beethoven = addModel("data/big_spider.ply");
+    beethoven.set_texture(checkerboard);
     beethoven.pass_info_shader();
     //
 

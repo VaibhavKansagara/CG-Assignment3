@@ -11,6 +11,8 @@ Model::Model(){
     is_selected = false;
     is_light_source = false;
     is_select_rotate = false;
+    no_m_press = 0;
+    no_t_press = 0;
 }
 
 Model::~Model(){
@@ -85,6 +87,14 @@ const Texture & Model::get_texture() const{
     return texture;
 }
 
+unsigned int Model::get_no_m_press() const {
+    return no_m_press;
+}
+
+unsigned int Model::get_no_t_press() const {
+    return no_t_press;
+}
+
 bool Model::get_light_source() const {
     return (is_light_source == true);
 }
@@ -99,6 +109,18 @@ bool Model::get_is_select_rotate() const{
 
 Color Model::get_vertex_color(int idx) const{
     return vertices_color[idx];
+}
+
+vector<float> Model::get_spherical() const {
+    return spherical;
+}
+
+vector<float> Model::get_cylindrical() const {
+    return cylindrical;
+}
+
+vector<float> Model::get_plane() const {
+    return plane;
 }
 
 void Model::set_vertex_color(int idx,const Color& color){
@@ -134,7 +156,28 @@ void Model::set_select_rotate(bool val) {
 
 void Model::set_texture(const Texture& tex) {
     texture = tex;
-    compute_texture_mapping();
+}
+
+void Model::set_no_m_press(unsigned int temp) {
+    no_m_press = temp;
+}
+
+void Model::set_no_t_press(unsigned int temp) {
+    no_t_press = temp;
+}
+
+void Model::change_mapping() {
+    glBindBuffer(GL_ARRAY_BUFFER,textureVBO);
+    if (no_m_press == 0) {
+        glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*plane.size(),
+                            &plane[0],GL_STATIC_DRAW);
+    } else if (no_m_press == 1) {
+        glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*spherical.size(),
+                            &spherical[0],GL_STATIC_DRAW);
+    } else {
+        glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*cylindrical.size(),
+                            &cylindrical[0],GL_STATIC_DRAW);
+    }
 }
 
 void Model::pass_info_lightshader(){
@@ -169,28 +212,28 @@ void Model::pass_info_shader(){
                                             &get_indices()[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(void*)0);
     glEnableVertexAttribArray(0);
+    
     unsigned int ColorBuffer;
     glGenBuffers(1,&ColorBuffer);
     glBindBuffer(GL_ARRAY_BUFFER,ColorBuffer);
-    try{
-        if(get_vertices().size() != 3*get_vertices_color().size()){
-            throw string("Size of vertices and vertices_color is not same");
-        }
-    }
-    catch(const string& s){
-        cout << s << endl;
-    }
     glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*get_vertices().size(),&get_vertices_color()[0],GL_STATIC_DRAW);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(void*)0);
     glEnableVertexAttribArray(1);
 
-    unsigned int textureBuffer;
-    glGenBuffers(1,&textureBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER,textureBuffer);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*texture.get_plane().size(),&texture.get_plane()[0],GL_STATIC_DRAW);
+    glGenBuffers(1,&textureVBO);
+    glBindBuffer(GL_ARRAY_BUFFER,textureVBO);
+    if (no_m_press == 0) {
+        glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*plane.size(),
+                            &plane[0],GL_STATIC_DRAW);
+    } else if (no_m_press == 1) {
+        glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*spherical.size(),
+                            &spherical[0],GL_STATIC_DRAW);
+    } else {
+        glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*cylindrical.size(),
+                            &cylindrical[0],GL_STATIC_DRAW);
+    }
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(2);
-
 }
 
 bool is_between(float mini,float maxi,float value){
@@ -216,6 +259,18 @@ void Model::set_mini(const Point& point){
 
 void Model::set_maxi(const Point& point){
     maxi = point;
+}
+
+void Model::set_spherical(const vector<float>& sph) {
+    spherical = sph;
+}
+
+void Model::set_cylindrical(const vector<float>& cyl) {
+    cylindrical = cyl;
+}
+
+void Model::set_plane(const vector<float>& pl) {
+    plane = pl;
 }
 
 void Model::compute_adj_list(){
@@ -271,7 +326,6 @@ void Model::compute_spherical() {
     center.y = (maxi.getY() + mini.getY()) * 0.5f;
     center.z = (maxi.getZ() + mini.getZ()) * 0.5f;
     float r = (maxi.getX() - mini.getX()) * 0.5f;
-    vector<float> spherical;
     for (int i = 0; i < (vertices.size()/3) ; i++) {
         glm::vec3 p;
         p.x = vertices[i*3];
@@ -287,13 +341,11 @@ void Model::compute_spherical() {
         spherical.push_back(tex.x);
         spherical.push_back(tex.y);
     }
-    texture.set_spherical(spherical);
 }
 
 void Model::compute_cylindrical() {
     float height = maxi.getZ() - mini.getZ();
     float r = (maxi.getX() - mini.getX()) * 0.5f;
-    vector<float> cylindrical;
     for (int i = 0; i < (vertices.size()/3) ; i++) {
         glm::vec2 tex;
         glm::vec3 pos;
@@ -305,11 +357,9 @@ void Model::compute_cylindrical() {
         cylindrical.push_back(tex.x);
         cylindrical.push_back(tex.y);
     }
-    texture.set_cylindrical(cylindrical);
 }
 
 void Model::compute_plane() {
-    vector<float> plane;
     for (int i = 0; i < (vertices.size()/3) ; i++) {
         glm::vec2 tex;
         glm::vec3 pos;
@@ -321,7 +371,6 @@ void Model::compute_plane() {
         plane.push_back(tex.x);
         plane.push_back(tex.y);
     }
-    texture.set_plane(plane);
 }
 
 void Model::compute_texture_mapping() {
@@ -475,5 +524,6 @@ ifstream & operator >> (ifstream &fin, Model &model){
 
     //compute color of the vertices.
     model.compute_vertices_color();
+    model.compute_texture_mapping();
     return fin;
 }

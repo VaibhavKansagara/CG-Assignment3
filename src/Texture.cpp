@@ -17,36 +17,12 @@ void Texture::bind_texture(unsigned int id) const {
     glBindTexture(GL_TEXTURE_2D, id);
 }
 
-vector<float> Texture::get_spherical() const {
-    return spherical;
-}
-
-vector<float> Texture::get_cylindrical() const {
-    return cylindrical;
-}
-
-vector<float> Texture::get_plane() const {
-    return plane;
-}
-
 string Texture::get_filename() const{
     return filename;
 }
 
 void Texture::set_filename(string name){
     filename = name;
-}
-
-void Texture::set_spherical(const vector<float>& sph) {
-    spherical = sph;
-}
-
-void Texture::set_cylindrical(const vector<float>& cyl) {
-    cylindrical = cyl;
-}
-
-void Texture::set_plane(const vector<float>& pl) {
-    plane = pl;
 }
 
 void Texture::load_create_texture() const {

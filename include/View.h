@@ -33,7 +33,7 @@ public:
 
     void set_projection(const glm::mat4& pr);
 
-    void display(const Model& model,const Shader& ourshader);
+    void display(const Model& model,Shader& ourshader);
 
     void display_lightsource(const Model& model,const Shader& ourshader);
 private:

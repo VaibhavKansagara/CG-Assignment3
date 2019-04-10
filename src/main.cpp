@@ -23,6 +23,7 @@ using namespace std;
 
 const GLfloat screenwidth = 800.0;
 const GLfloat screenheight = 800.0;
+vector<Texture> texture_list;
 
 // light souce position
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -60,22 +61,19 @@ int main(){
     Shader lightingShader("shaders/light_shader_vs.txt", "shaders/light_shaderfs.txt");
 
     //Create texture objects.
-    Texture wood("images/wall.jpg");
-
-    Texture checkerboard("images/checkerboard.png");
-
-    Texture mars("images/mars.jpg");
-
-    Texture selfie("images/selfie.jpg");
+    texture_list.push_back(Texture("images/wall.jpg"));
+    texture_list.push_back(Texture("images/checkerboard.png"));
+    texture_list.push_back(Texture("images/mars.jpg"));
+    texture_list.push_back(Texture("images/selfie.jpg"));
     //
 
     //Create Model and add models.
     Model cow = addModel("data/cow.ply");
-    cow.set_texture(wood);
+    cow.set_texture(texture_list[0]);
     cow.pass_info_shader();
 
     Model beethoven = addModel("data/big_spider.ply");
-    beethoven.set_texture(checkerboard);
+    beethoven.set_texture(texture_list[1]);
     beethoven.pass_info_shader();
     //
 
@@ -101,7 +99,7 @@ int main(){
         glClearColor(0.2f,0.3f,0.3f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        ourshader.use();
+        // ourshader.use();
         ourshader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         ourshader.setVec3("lightPos", lightPos);
 

@@ -3,6 +3,8 @@
 
 using namespace std;
 
+extern vector<Texture> texture_list;
+
 Controller::Controller(){}
 
 Controller::Controller(vector<Model*> mv):model_vector(mv){}
@@ -142,6 +144,35 @@ void Controller::process_input(GLFWwindow* window){
         }
         glm::quat quat = glm::angleAxis(glm::radians(angle), glm::normalize(normal));
         model->set_rotate(glm::mat4_cast(quat) * model->get_rotate());
+    }
+
+    static bool presst = false,releaset = false;
+    if(glfwGetKey(window,GLFW_KEY_T) == GLFW_PRESS) {
+        presst = true;
+        releaset = false;
+    }
+
+    if(presst == true && glfwGetKey(window,GLFW_KEY_T) == GLFW_RELEASE) {
+        releaset = true;
+        presst = false;
+    }
+
+    if (releaset == true) {
+        // cout << active_model << endl;
+        Model* model = model_vector[active_model];
+        unsigned int new_no = (model->get_no_t_press() + 1) % 4;
+        model->set_no_t_press(new_no);
+        // cout << model->get_texture().get_filename() << " ";
+        model->set_texture(texture_list[new_no]);
+        // cout << model->get_texture().get_filename() << endl;
+        releaset = false;
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_M) == GLFW_PRESS){
+    	Model* model = model_vector[active_model];
+        unsigned int new_no = (model->get_no_m_press() + 1) % 3;
+        model->set_no_m_press(new_no);
+        model->change_mapping();
     }
 
     if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE){

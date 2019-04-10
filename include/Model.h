@@ -65,9 +65,19 @@ public:
 
     const Texture& get_texture() const;
 
+    unsigned int get_no_m_press() const;
+
+    unsigned int get_no_t_press() const;
+
     bool is_select() const;
 
     bool get_is_select_rotate() const;
+
+    vector<float> get_spherical() const;
+
+    vector<float> get_cylindrical() const;
+
+    vector<float> get_plane() const;
 
     void set_vertex_color(int idx,const Color& color);
 
@@ -91,6 +101,16 @@ public:
 
     void set_texture(const Texture& tex);
 
+    void set_no_m_press(unsigned int temp);
+
+    void set_no_t_press(unsigned int temp);
+
+    void set_spherical(const vector<float>& sph);
+
+    void set_cylindrical(const vector<float>& cyl);
+
+    void set_plane(const vector<float>& pl);
+
     bool is_inside(Point trans_coord);
 
     void compute_adj_list();
@@ -111,6 +131,8 @@ public:
 
     void pass_info_lightshader();
 
+    void change_mapping();
+
     Point transform(const Point& point,const Point& normal,const Point& incentre,float inradii);
 
     friend ifstream & operator >> (ifstream &fin, Model &model);
@@ -129,8 +151,10 @@ private:
     glm::mat4 translate,rotate;
     Point mini,maxi;
     bool is_selected,is_light_source,is_select_rotate;
-    unsigned int VAO,VBO,EBO;
+    unsigned int VAO,VBO,EBO,textureVBO;
     Texture texture;
+    vector<float> spherical,cylindrical,plane;
+    unsigned int no_m_press,no_t_press;
 };
 
 #endif

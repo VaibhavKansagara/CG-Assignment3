@@ -28,6 +28,7 @@ unsigned int no_t_press = 0;
 unsigned int no_m_press = 0;
 
 int source1=1,source2=1,source3=1,source4=1;
+Controller controller;
 
 // light souce position
 glm::vec3 lightPos1(-50.0f, 50.0f, 2.0f);
@@ -60,6 +61,11 @@ Model addModel(string name){
     return model;
 }
 
+static void handleKeys(GLFWwindow* window, int key, int code, int action, int mode){
+  controller.handleKeys(window,key,code,action,mode);
+}
+
+
 int main(){
     GLFWwindow * window = create_window();
 
@@ -76,15 +82,15 @@ int main(){
 
     //Create Model and add models.
     Model sphere = addModel("data/sphere.ply");
-    sphere.set_texture(texture_list[0]);
+    sphere.set_texture(texture_list[1]);
     sphere.pass_info_shader();
 
     Model canstick = addModel("data/canstick.ply");
-    canstick.set_texture(texture_list[0]);
+    canstick.set_texture(texture_list[1]);
     canstick.pass_info_shader();
 
     Model cow = addModel("data/cow.ply");
-    cow.set_texture(texture_list[0]);
+    cow.set_texture(texture_list[1]);
     cow.pass_info_shader();
 
     //
@@ -122,12 +128,13 @@ int main(){
     View view;
 
     //add models to  controller object.
-    Controller controller;
     controller.add(&cow);
     controller.add(&canstick);
     controller.add(&sphere);
 
     while(!glfwWindowShouldClose(window)){
+        glfwPollEvents();
+        glfwSetKeyCallback(window,handleKeys);
         controller.process_input(window);
         glClearColor(0.2f,0.3f,0.3f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -135,7 +142,7 @@ int main(){
         ourshader.use();
         ourshader.setVec3("lightColor1", 1.0f, 1.0f, 1.0f);
         ourshader.setVec3("lightPos1", lightPos1.x ,lightPos1.y,lightPos1.z);
-        ourshader.setInt("source1",source2);
+        ourshader.setInt("source1",source1);
 
         ourshader.setVec3("lightColor2", 0.0f, 0.0f, 1.0f);
         ourshader.setVec3("lightPos2", lightPos2.x ,lightPos2.y,lightPos2.z);

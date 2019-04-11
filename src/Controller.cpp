@@ -47,9 +47,8 @@ int Controller::find(double x,double y){
     return -1;
 }
 
-void Controller::process_input(GLFWwindow* window){
-
-    if (glfwGetKey(window,GLFW_KEY_T) == GLFW_PRESS) {
+void Controller::handleKeys(GLFWwindow* window, int key, int code, int action, int mods){
+    if (key == GLFW_KEY_T  && action == GLFW_PRESS){
         unsigned int new_no = (no_t_press + 1) % 4;
         for (int i=0;i<model_vector.size();i++){
             model_vector[i]->set_texture(texture_list[new_no]);
@@ -57,7 +56,7 @@ void Controller::process_input(GLFWwindow* window){
         no_t_press = new_no;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_M) == GLFW_PRESS){
+    if(key == GLFW_KEY_M  && action == GLFW_PRESS){
         unsigned int new_no = (no_m_press + 1) % 3;
         for (int i=0;i<model_vector.size();i++){
             model_vector[i]->change_mapping();;
@@ -69,41 +68,50 @@ void Controller::process_input(GLFWwindow* window){
     glfwGetCursorPos(window,&x,&y);
     int active_model = find(x,y);
     // cout << "active-model:" << active_model <<endl;
-    if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
+
+    if(key == GLFW_KEY_ESCAPE  && action == GLFW_PRESS){
         glfwSetWindowShouldClose(window,true);
     }
 
-    if(glfwGetKey(window,GLFW_KEY_Q) == GLFW_PRESS){
+    if(key == GLFW_KEY_Q  && action == GLFW_PRESS){
         if (source1) source1 = 0;
         else source1 = 1;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){
+    if(key == GLFW_KEY_W  && action == GLFW_PRESS){
         if (source2) source2 = 0;
-        else source2 = 1;	
+        else source2 = 1;   
     }
 
-    if(glfwGetKey(window,GLFW_KEY_E) == GLFW_PRESS){
-    	if (source3) source3 = 0;
+    if(key == GLFW_KEY_E  && action == GLFW_PRESS){
+        if (source3) source3 = 0;
         else source3 = 1;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_R) == GLFW_PRESS){
-    	if (source4) source4 = 0;
+    if(key == GLFW_KEY_R  && action == GLFW_PRESS){
+        if (source4) source4 = 0;
         else source4 = 1;
     }
 
     if(active_model == NOT_ANY_MODEL) return;
 
-    if(glfwGetKey(window,GLFW_KEY_KP_ADD) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_KP_ADD) == GLFW_REPEAT){
+    if(key == GLFW_KEY_KP_ADD  && action == GLFW_PRESS || key == GLFW_KEY_KP_ADD  && action == GLFW_REPEAT){
         Model* model = model_vector[active_model];
         model->set_scale(model->get_scale() + 0.05);
     }
 
-    if(glfwGetKey(window,GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_KP_SUBTRACT) == GLFW_REPEAT){
-    	Model* model = model_vector[active_model];
+    if(key == GLFW_KEY_KP_SUBTRACT  && action == GLFW_PRESS || key == GLFW_KEY_KP_SUBTRACT  && action == GLFW_REPEAT){
+        Model* model = model_vector[active_model];
         model->set_scale(model->get_scale() - 0.05);
     }
+}
+
+void Controller::process_input(GLFWwindow* window){
+    double x,y;
+    glfwGetCursorPos(window,&x,&y);
+    int active_model = find(x,y);
+
+    if(active_model == NOT_ANY_MODEL) return;
 
     if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS ||
             glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_REPEAT){

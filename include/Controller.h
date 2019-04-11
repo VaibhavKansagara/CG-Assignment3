@@ -30,6 +30,8 @@ public:
 
     int find(double x,double y);
 
+    void handleKeys(GLFWwindow* window, int key, int code, int action, int mods);
+
     void process_input(GLFWwindow* window);
 
 private:

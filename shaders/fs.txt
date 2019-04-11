@@ -57,5 +57,6 @@ vec3 CalcColor(int flag)
 void main()
 {
     vec3 final_res = source1 * CalcColor(1) + source2 * CalcColor(2) + source3 * CalcColor(3) + source4 * CalcColor(4);
-    FragColor = texture(ourtexture, TexCoord) * vec4(final_res,1.0);
+    //FragColor = texture(ourtexture, TexCoord) * vec4(final_res,1.0);
+    FragColor = texture(ourtexture, TexCoord);
 }

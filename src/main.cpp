@@ -24,6 +24,7 @@ using namespace std;
 const GLfloat screenwidth = 800.0;
 const GLfloat screenheight = 800.0;
 vector<Texture> texture_list;
+unsigned int no_t_press = 0;
 
 // light souce position
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -73,7 +74,7 @@ int main(){
     cow.pass_info_shader();
 
     Model beethoven = addModel("data/big_spider.ply");
-    beethoven.set_texture(texture_list[1]);
+    beethoven.set_texture(texture_list[0]);
     beethoven.pass_info_shader();
     //
 

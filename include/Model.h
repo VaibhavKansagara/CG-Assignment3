@@ -7,6 +7,8 @@
 #define GL_GLEXT_PROTOTYPES
 #endif
 
+extern unsigned int no_t_press;
+
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -67,8 +69,6 @@ public:
 
     unsigned int get_no_m_press() const;
 
-    unsigned int get_no_t_press() const;
-
     bool is_select() const;
 
     bool get_is_select_rotate() const;
@@ -102,8 +102,6 @@ public:
     void set_texture(const Texture& tex);
 
     void set_no_m_press(unsigned int temp);
-
-    void set_no_t_press(unsigned int temp);
 
     void set_spherical(const vector<float>& sph);
 
@@ -154,7 +152,7 @@ private:
     unsigned int VAO,VBO,EBO,textureVBO;
     Texture texture;
     vector<float> spherical,cylindrical,plane;
-    unsigned int no_m_press,no_t_press;
+    unsigned int no_m_press;
 };
 
 #endif

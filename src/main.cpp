@@ -75,13 +75,18 @@ int main(){
     //
 
     //Create Model and add models.
+    Model sphere = addModel("data/sphere.ply");
+    sphere.set_texture(texture_list[0]);
+    sphere.pass_info_shader();
+
+    Model canstick = addModel("data/canstick.ply");
+    canstick.set_texture(texture_list[0]);
+    canstick.pass_info_shader();
+
     Model cow = addModel("data/cow.ply");
     cow.set_texture(texture_list[0]);
     cow.pass_info_shader();
 
-    Model beethoven = addModel("data/big_spider.ply");
-    beethoven.set_texture(texture_list[0]);
-    beethoven.pass_info_shader();
     //
 
     glEnable(GL_DEPTH_TEST);
@@ -119,7 +124,8 @@ int main(){
     //add models to  controller object.
     Controller controller;
     controller.add(&cow);
-    controller.add(&beethoven);
+    controller.add(&canstick);
+    controller.add(&sphere);
 
     while(!glfwWindowShouldClose(window)){
         controller.process_input(window);
@@ -146,7 +152,8 @@ int main(){
 
         //display all the models.
         view.display(cow,ourshader);
-        view.display(beethoven,ourshader);
+        view.display(canstick,ourshader);
+        view.display(sphere,ourshader);
 
         // use lighting shader and display the source of the light.
         lightingShader.use();

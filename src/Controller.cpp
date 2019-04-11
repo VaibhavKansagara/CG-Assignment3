@@ -73,20 +73,24 @@ void Controller::process_input(GLFWwindow* window){
         glfwSetWindowShouldClose(window,true);
     }
 
-    if(glfwGetKey(window,GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_UP) == GLFW_REPEAT){
-    	lightPos1.y += 0.5;
+    if(glfwGetKey(window,GLFW_KEY_Q) == GLFW_PRESS){
+        if (source1) source1 = 0;
+        else source1 = 1;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_REPEAT){
-    	lightPos1.y -= 0.5;
+    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){
+        if (source2) source2 = 0;
+        else source2 = 1;	
     }
 
-    if(glfwGetKey(window,GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_LEFT) == GLFW_REPEAT){
-    	lightPos1.x -= 0.5;
+    if(glfwGetKey(window,GLFW_KEY_E) == GLFW_PRESS){
+    	if (source3) source3 = 0;
+        else source3 = 1;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_RIGHT) == GLFW_REPEAT){
-    	lightPos1.x += 0.5;
+    if(glfwGetKey(window,GLFW_KEY_R) == GLFW_PRESS){
+    	if (source4) source4 = 0;
+        else source4 = 1;
     }
 
     if(active_model == NOT_ANY_MODEL) return;

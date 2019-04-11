@@ -11,6 +11,10 @@ extern glm::vec3 lightPos1;
 extern glm::vec3 lightPos2;
 extern glm::vec3 lightPos3;
 extern glm::vec3 lightPos4;
+extern int source1;
+extern int source2;
+extern int source3;
+extern int source4;
 
 class Controller{
 public:

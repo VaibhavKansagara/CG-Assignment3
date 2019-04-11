@@ -25,7 +25,7 @@ void View::set_projection(const glm::mat4& pr){
 void View::display_lightsource(const Model& model,const Shader& ourshader){
     glm::mat4 model_light = glm::mat4(1.0f);
     model_light = glm::scale(model_light,glm::vec3(0.01,0.01,0.01));
-    model_light = glm::translate(model_light, lightPos);
+    model_light = glm::translate(model_light, model.get_lightpos());
     ourshader.setMat4("model",model_light);
     int modelLoc = glGetUniformLocation(ourshader.ID, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model_light));
@@ -39,7 +39,7 @@ void View::display(const Model& model,Shader& ourshader) {
         return;
     }
 
-    ourshader.use();
+    // ourshader.use();
     set_view(glm::mat4(1.0f));
     set_projection(glm::mat4(1.0f));
 

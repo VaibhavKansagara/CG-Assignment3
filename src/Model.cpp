@@ -53,6 +53,10 @@ GLfloat Model::get_scale() const{
     return scale;
 }
 
+glm::vec3 Model::get_lightpos() const{
+    return lightpos;
+}
+
 glm::mat4 Model::get_rotate() const{
     return rotate;
 }
@@ -135,11 +139,19 @@ void Model::set_scale(GLfloat sc) {
     scale = sc;
 }
 
+void Model::set_lightpos(glm::vec3 pos) {
+    lightpos = pos;
+}
+
 void Model::set_rotate(const glm::mat4& rr) {
     rotate = rr;
 }
 void Model::set_selected(bool val) {
     is_selected = val;
+}
+
+void Model::set_light_no(int no) {
+    light_no = no;
 }
 
 void Model::set_select_rotate(bool val) {

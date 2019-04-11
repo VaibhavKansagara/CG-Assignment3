@@ -58,6 +58,8 @@ public:
 
     glm::mat4 get_rotate() const;
 
+    glm::vec3 get_lightpos() const;
+
     GLfloat get_scale() const;
 
     glm::mat4 get_model() const;
@@ -84,6 +86,8 @@ public:
 
     void set_scale(GLfloat sc);
 
+    void set_light_no(int no);
+
     void set_rotate(const glm::mat4& rr);
 
     void set_cursor_pos(const glm::vec3& pos);
@@ -97,6 +101,8 @@ public:
     void set_light_source(bool val);
 
     void set_select_rotate(bool val);
+
+    void set_lightpos(glm::vec3 pos);
 
     void set_texture(const Texture& tex);
 
@@ -149,6 +155,8 @@ private:
     unsigned int VAO,VBO,EBO,textureVBO;
     Texture texture;
     vector<float> spherical,cylindrical,plane;
+    int light_no;
+    glm::vec3 lightpos;
 };
 
 #endif

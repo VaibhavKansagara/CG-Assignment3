@@ -27,8 +27,13 @@ vector<Texture> texture_list;
 unsigned int no_t_press = 0;
 unsigned int no_m_press = 0;
 
+int source1=1,source2=1,source3=1,source4=1;
+
 // light souce position
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos1(-50.0f, 50.0f, 2.0f);
+glm::vec3 lightPos2(-10.0f, 50.0f, 2.0f);
+glm::vec3 lightPos3(30.0f, 50.0f, 2.0f);
+glm::vec3 lightPos4(70.0f, 50.0f, 2.0f);
 
 void framebuffer_size_callback(GLFWwindow* window,int width,int height){
     glViewport(0,0,width,height);
@@ -82,9 +87,29 @@ int main(){
     glEnable(GL_DEPTH_TEST);
 
     //light part starts
-    Model sphere = addModel("data/sphere.ply");
-    sphere.set_light_source(true);
-    sphere.pass_info_shader();
+    Model sphere1 = addModel("data/sphere.ply");
+    sphere1.set_light_source(true);
+    sphere1.set_lightpos(lightPos1);
+    sphere1.set_light_no(1);
+    sphere1.pass_info_shader();
+
+    Model sphere2 = addModel("data/sphere.ply");
+    sphere2.set_light_source(true);
+    sphere2.set_lightpos(lightPos2);
+    sphere2.set_light_no(2);
+    sphere2.pass_info_shader();
+
+    Model sphere3 = addModel("data/sphere.ply");
+    sphere3.set_light_source(true);
+    sphere3.set_lightpos(lightPos3);
+    sphere3.set_light_no(3);
+    sphere3.pass_info_shader();
+
+    Model sphere4 = addModel("data/sphere.ply");
+    sphere4.set_light_source(true);
+    sphere4.set_lightpos(lightPos4);
+    sphere4.set_light_no(4);
+    sphere4.pass_info_shader();
     //light part ends.
 
 
@@ -101,9 +126,23 @@ int main(){
         glClearColor(0.2f,0.3f,0.3f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // ourshader.use();
-        ourshader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        ourshader.setVec3("lightPos", lightPos);
+        ourshader.use();
+        ourshader.setVec3("lightColor1", 1.0f, 1.0f, 1.0f);
+        ourshader.setVec3("lightPos1", lightPos1.x ,lightPos1.y,lightPos1.z);
+        ourshader.setInt("source1",source2);
+
+        ourshader.setVec3("lightColor2", 0.0f, 0.0f, 1.0f);
+        ourshader.setVec3("lightPos2", lightPos2.x ,lightPos2.y,lightPos2.z);
+        ourshader.setInt("source2",source2);
+
+        ourshader.setVec3("lightColor3", 0.0f, 1.0f, 0.0f);
+        ourshader.setVec3("lightPos3", lightPos3.x ,lightPos3.y,lightPos3.z);
+        ourshader.setInt("source3",source3);
+
+        ourshader.setVec3("lightColor4", 1.0f, 0.0f, 0.0f);
+        ourshader.setVec3("lightPos4", lightPos4.x ,lightPos4.y,lightPos4.z);
+        ourshader.setInt("source4",source4);
+
 
         //display all the models.
         view.display(cow,ourshader);
@@ -111,7 +150,10 @@ int main(){
 
         // use lighting shader and display the source of the light.
         lightingShader.use();
-        view.display(sphere,lightingShader);
+        view.display(sphere1,lightingShader);
+        view.display(sphere2,lightingShader);
+        view.display(sphere3,lightingShader);
+        view.display(sphere4,lightingShader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

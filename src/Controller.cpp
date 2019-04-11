@@ -74,19 +74,19 @@ void Controller::process_input(GLFWwindow* window){
     }
 
     if(glfwGetKey(window,GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_UP) == GLFW_REPEAT){
-    	lightPos.y += 0.5;
+    	lightPos1.y += 0.5;
     }
 
     if(glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_REPEAT){
-    	lightPos.y -= 0.5;
+    	lightPos1.y -= 0.5;
     }
 
     if(glfwGetKey(window,GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_LEFT) == GLFW_REPEAT){
-    	lightPos.x -= 0.5;
+    	lightPos1.x -= 0.5;
     }
 
     if(glfwGetKey(window,GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window,GLFW_KEY_RIGHT) == GLFW_REPEAT){
-    	lightPos.x += 0.5;
+    	lightPos1.x += 0.5;
     }
 
     if(active_model == NOT_ANY_MODEL) return;

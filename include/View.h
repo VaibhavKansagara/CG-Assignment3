@@ -15,7 +15,6 @@
 
 using namespace std;
 
-extern glm::vec3 lightPos;
 extern const GLfloat screenwidth,screenheight;
 extern const unsigned int VAO;
 

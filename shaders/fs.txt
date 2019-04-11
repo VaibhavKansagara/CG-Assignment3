@@ -6,25 +6,56 @@ in vec3 FragPos;
 in vec2 TexCoord;
 
 uniform sampler2D ourtexture;
-uniform vec3 lightPos;
-uniform vec3 lightColor;
 
-void main()
+uniform int source1,source2,source3,source4;
+
+uniform vec3 lightPos1;
+uniform vec3 lightColor1;
+
+uniform vec3 lightPos2;
+uniform vec3 lightColor2;
+
+uniform vec3 lightPos3;
+uniform vec3 lightColor3;
+
+uniform vec3 lightPos4;
+uniform vec3 lightColor4;
+
+vec3 CalcColor(int flag)
 {
-    float ambient_strength = 0.1;
-    vec3 ambient = ambient_strength * lightColor;
+    float ambient_strength = 0.2;
+    vec3 curr_light_color,curr_light_pos;
+    if (flag == 1) {
+        curr_light_color = lightColor1;
+        curr_light_pos = lightPos1;
+    } else if(flag == 2) {
+        curr_light_color = lightColor2;
+        curr_light_pos = lightPos2;
+    } else if(flag == 3) {
+        curr_light_color = lightColor3;
+        curr_light_pos = lightPos3;
+    } else {
+        curr_light_color = lightColor4;
+        curr_light_pos = lightPos4;
+    } 
+    vec3 ambient = ambient_strength * curr_light_color;
 
-    vec3 norm = normalize(color);
-    vec3 lightDir = normalize(lightPos-FragPos);
-    float diffuse_constant = max(0.0,dot(norm,lightDir));
-    vec3 diffuse = diffuse_constant * lightColor;
+    vec3 lightDir = normalize(curr_light_pos-FragPos);
+    float diffuse_constant = max(0.0,dot(color,lightDir));
+    vec3 diffuse = diffuse_constant * curr_light_color;
 
     float specular_strength = 0.5;
     vec3 viewDir = normalize(vec3(0.0,0.0,0.0)-FragPos);
-    vec3 reflectDir = reflect(-lightDir,norm);
+    vec3 reflectDir = reflect(-lightDir,color);
     float spec_constant = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specular_strength * spec_constant * lightColor;
+    vec3 specular = specular_strength * spec_constant * curr_light_color;
 
-    vec3 res = (ambient + diffuse + specular) * color;
-    FragColor = texture(ourtexture, TexCoord);
+    vec3 res = (ambient + diffuse + specular) * curr_light_color;
+    return res;
+}
+
+void main()
+{
+    vec3 final_res = source1 * CalcColor(1) + source2 * CalcColor(2) + source3 * CalcColor(3) + source4 * CalcColor(4);
+    FragColor = texture(ourtexture, TexCoord) * vec4(final_res,1.0);
 }

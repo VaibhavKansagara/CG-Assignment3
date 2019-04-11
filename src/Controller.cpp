@@ -48,13 +48,21 @@ int Controller::find(double x,double y){
 }
 
 void Controller::process_input(GLFWwindow* window){
-    
+
     if (glfwGetKey(window,GLFW_KEY_T) == GLFW_PRESS) {
         unsigned int new_no = (no_t_press + 1) % 4;
         for (int i=0;i<model_vector.size();i++){
             model_vector[i]->set_texture(texture_list[new_no]);
         }
         no_t_press = new_no;
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_M) == GLFW_PRESS){
+        unsigned int new_no = (no_m_press + 1) % 3;
+        for (int i=0;i<model_vector.size();i++){
+            model_vector[i]->change_mapping();;
+        }
+        no_m_press = new_no;
     }
 
     double x,y;
@@ -153,13 +161,6 @@ void Controller::process_input(GLFWwindow* window){
         }
         glm::quat quat = glm::angleAxis(glm::radians(angle), glm::normalize(normal));
         model->set_rotate(glm::mat4_cast(quat) * model->get_rotate());
-    }
-
-    if(glfwGetKey(window,GLFW_KEY_M) == GLFW_PRESS){
-    	Model* model = model_vector[active_model];
-        unsigned int new_no = (model->get_no_m_press() + 1) % 3;
-        model->set_no_m_press(new_no);
-        model->change_mapping();
     }
 
     if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE){

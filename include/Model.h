@@ -8,6 +8,7 @@
 #endif
 
 extern unsigned int no_t_press;
+extern unsigned int no_m_press;
 
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
@@ -67,8 +68,6 @@ public:
 
     const Texture& get_texture() const;
 
-    unsigned int get_no_m_press() const;
-
     bool is_select() const;
 
     bool get_is_select_rotate() const;
@@ -100,8 +99,6 @@ public:
     void set_select_rotate(bool val);
 
     void set_texture(const Texture& tex);
-
-    void set_no_m_press(unsigned int temp);
 
     void set_spherical(const vector<float>& sph);
 
@@ -152,7 +149,6 @@ private:
     unsigned int VAO,VBO,EBO,textureVBO;
     Texture texture;
     vector<float> spherical,cylindrical,plane;
-    unsigned int no_m_press;
 };
 
 #endif

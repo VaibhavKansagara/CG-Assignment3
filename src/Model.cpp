@@ -87,10 +87,6 @@ const Texture & Model::get_texture() const{
     return texture;
 }
 
-unsigned int Model::get_no_m_press() const {
-    return no_m_press;
-}
-
 bool Model::get_light_source() const {
     return (is_light_source == true);
 }
@@ -152,10 +148,6 @@ void Model::set_select_rotate(bool val) {
 
 void Model::set_texture(const Texture& tex) {
     texture = tex;
-}
-
-void Model::set_no_m_press(unsigned int temp) {
-    no_m_press = temp;
 }
 
 void Model::change_mapping() {

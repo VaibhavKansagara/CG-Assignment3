@@ -25,6 +25,7 @@ const GLfloat screenwidth = 800.0;
 const GLfloat screenheight = 800.0;
 vector<Texture> texture_list;
 unsigned int no_t_press = 0;
+unsigned int no_m_press = 0;
 
 // light souce position
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
